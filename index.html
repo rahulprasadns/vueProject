@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="hello.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+        <!--Adding VUE to the page-->
+        <script src="vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div class="my-header">
+                <h1 class="title-header">Some thing about Astroids</h1>
+            </div>
+            <div class="container" id="container" style="display: none;">
+                <div class="card mt-5">
+                    <transition name="shooting-star">
+                        <div class="m-3" v-cloak v-if="numAsteroids > 0 && showSummary">
+                            <p>Showing {{numAsteroids}} records</p>
+                            <p v-cloak >{{closestObject}} is the closest that has come to earth</p>
+                        </div>
+                    </transition>
+                    <div class="m-3">
+                        <a href="#" @click="showSummary = !showSummary">Show or Hide summary</a>
+                    </div>
+                    <h2 class="card-header">Near Earth-Objects</h2>
+                    <table class="table table-striped" :class = "['table-dark', 'table-bodered']">
+                        <thead class="thead-light">
+                            <th style="text-align: center;">Name</th>
+                            <th style="text-align: center;">Close appreach Date</th>
+                            <th style="text-align: center;">Miss Distance</th>
+                            <th style="text-align: center;">Remove a Row</th>
+                        </thead>
+                        <tbody v-cloak>
+                            <tr v-for="(a, index) in asteroids" v-bind:key="a.neo_reference_id" :class="{highlight: isMissingData(a)}">
+                                <td>{{a.name}}</td>
+                                <td>{{getCloseApproachDate(a)}}</td>
+                                <td>
+                                    <ul v-if="a.close_approach_data.length > 0">
+                                        <li v-for="(value, key) in a.close_approach_data[0].miss_distance">
+                                            {{key}}: {{value}}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <button @click="remove(index)" class="btn btn-warning">Remove Row</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+    <!--Adding my JS to the HTML-->
+    <script src="hello.js"></script> 
+</html>
